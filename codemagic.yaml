@@ -1,0 +1,46 @@
+# Codemagic builds the iPhone app in the cloud (no Mac needed) and uploads it to TestFlight.
+# Before your first build, change the lines marked  # ← EDIT  (see the setup guide, step 7).
+# Builds only run when you press "Start new build" in Codemagic.
+
+workflows:
+  ios-testflight:
+    name: iPhone app to TestFlight
+    instance_type: mac_mini_m2          # covered by Codemagic's free monthly minutes
+    max_build_duration: 60
+
+    integrations:
+      app_store_connect: CoachApp       # the key name you typed in Codemagic → Integrations → Developer Portal
+
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.yourbusiness.coach   # ← EDIT: your bundle ID, same as BUNDLE_ID below
+      vars:
+        BUNDLE_ID: com.yourbusiness.coach           # ← EDIT: same value as above
+      node: 22.22.0
+      xcode: latest
+
+    scripts:
+      - name: Install packages
+        script: npm ci
+      - name: Build the web app
+        script: npm run build
+      - name: Copy it into the iPhone project
+        script: npx cap sync ios
+      - name: Set app name, bundle ID, icon and build number
+        script: node scripts/prepare-ios.mjs --bundle-id "$BUNDLE_ID" --build-number "$(date -u +%Y%m%d.%H%M)"
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Build the iPhone app
+        script: xcode-project build-ipa --project "ios/App/App.xcodeproj" --scheme "App"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true      # sends each build to TestFlight review automatically
+        beta_groups:
+          - Clients                     # your external TestFlight group: clients get new builds once approved

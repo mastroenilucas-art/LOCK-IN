@@ -1,0 +1,8 @@
+{
+  "appName": "Coach",
+  "supabaseUrl": "https://YOUR-PROJECT-ID.supabase.co",
+  "supabaseKey": "sb_publishable_PASTE-YOUR-KEY-HERE",
+  "helpEmail": "",
+  "testflightLink": "",
+  "webLink": ""
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Privacy policy</title>
+  <style>
+    :root { --ink:#F2F0EB; --text:#1B242C; --dim:#5E6A75; --amp:#B3561A; color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { --ink:#10161C; --text:#D8E0E6; --dim:#8696A3; --amp:#E8873A; color-scheme: dark; } }
+    body { margin:0; background:var(--ink); color:var(--text); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+    main { max-width:680px; margin:0 auto; padding:32px 16px 64px; }
+    h1 { font-size:28px; line-height:1.15; margin:0 0 4px; }
+    h2 { font-size:18px; margin:28px 0 6px; }
+    p, li { margin:0 0 10px; }
+    .dim { color:var(--dim); }
+    a { color:var(--amp); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>{{APP_NAME}}: privacy policy</h1>
+  <p class="dim">Last updated: {{UPDATED}}</p>
+
+  <p>{{APP_NAME}} is the training app your coach uses to give you your program and see how your training is going. This page explains what the app stores and who can see it.</p>
+
+  <h2>What we store</h2>
+  <ul>
+    <li>Your name and email address, which your coach uses to create your login.</li>
+    <li>Your training log: the weights, reps and notes you type in, and which program and week you’re on.</li>
+  </ul>
+  <p>We don’t collect your location, contacts, photos or health data, we don’t show ads, and we don’t use tracking or analytics tools.</p>
+
+  <h2>Who can see it</h2>
+  <p>You and your coach. Nobody else at {{APP_NAME}} has access, and we never sell or share your information. The data is stored by our database provider, Supabase, which keeps it on our behalf and doesn’t use it for anything else.</p>
+
+  <h2>How long we keep it</h2>
+  <p>As long as you have an account. You can delete your account and your whole training log at any time in the app: tap the circle at the top right, then <b>Delete my account</b>. You can also ask your coach to delete it.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about your data: <a href="mailto:{{HELP_EMAIL}}">{{HELP_EMAIL}}</a>.</p>
+</main>
+</body>
+</html>

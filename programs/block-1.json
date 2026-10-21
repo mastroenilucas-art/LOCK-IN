@@ -1,0 +1,572 @@
+{
+  "format": 1,
+  "title": "Block 1 · Hypertrophy",
+  "subtitle": "8 weeks + deload · Sessions A, B, C · delts, upper chest, lats and arms first",
+  "unit": "kg",
+  "increment": "2.5 kg on a bar, the next dumbbell, or one pin",
+  "weeks": 9,
+  "deloadWeek": 9,
+  "phases": {
+    "1": "Weeks 1–2 · <b>Ramp-in</b>. Every set stops 2–3 reps before failure. Log every weight: this is your baseline.",
+    "3": "Weeks 3–4 · <b>Push</b>. Machines and cables: last set to failure. Barbell: stop 1 rep short.",
+    "5": "Weeks 5–6 · <b>Intensify</b>. Same as 3–4, plus myo-reps or partials on the last set where the card says so.",
+    "7": "Weeks 7–8 · <b>Peak</b>. Same as 5–6. Beat last week on every exercise: one more rep, or a little more weight.",
+    "9": "Week 9 · <b>Deload</b>. Half the sets, same weights, stop 3–4 reps short. Then back to week 1 with your new numbers."
+  },
+  "effort": {
+    "rampUntil": 2,
+    "techniqueFrom": 5,
+    "beatFrom": 7
+  },
+  "techniques": {
+    "myo": "Last set → <b>myo-reps</b>: hit failure, take 5 deep breaths, do 3–5 more. Repeat until you can't get 3.",
+    "partial": "Last set → <b>partials</b>: at failure, keep going with half reps in the stretched half until it won't move."
+  },
+  "shortPairs": 2,
+  "twoDay": {
+    "from": "C",
+    "into": {
+      "A": [
+        1,
+        2
+      ],
+      "B": [
+        3,
+        4
+      ]
+    }
+  },
+  "warmup": {
+    "title": "Warm-up · same every day · ~5 min",
+    "steps": [
+      "3–5 min easy treadmill walk (add some incline) or bike.",
+      "First exercise: ½ your working weight × 10, then ¾ × 4.",
+      "Each new exercise after that: the card tells you if it needs a light set first. Light sets don’t count."
+    ],
+    "note": "No floor stretching needed."
+  },
+  "sessions": [
+    {
+      "id": "A",
+      "name": "Session A",
+      "title": "Session A — Bench, pull-ups, legs",
+      "focus": "Strength day: your heaviest pressing and pulling while you're fresh.",
+      "short": "chest, lats, quads and side delts",
+      "pairs": [
+        {
+          "label": "Chest & lats · heavy",
+          "rest": 60,
+          "exercises": [
+            {
+              "name": "Barbell bench press",
+              "sets": 3,
+              "reps": "5–8",
+              "muscle": "chest",
+              "kind": "free",
+              "warmup": 2,
+              "cue": "Shoulder blades pinned, feet planted, touch your lower chest. This is your strength number: set the safety pins and never grind the last rep alone.",
+              "video": "bench press technique Jeff Nippard",
+              "busy": "Smith machine bench press — 3 × 5–8",
+              "busyNote": "Same lift on a fixed path, so the last set can go to failure.",
+              "noGym": "Push-ups, feet on a chair, loaded backpack — 3 × 8–15",
+              "noGymNote": "Too easy? Hands on two books for extra depth and a 2 s pause at the bottom."
+            },
+            {
+              "name": "Weighted pull-up",
+              "sets": 3,
+              "reps": "6–10",
+              "muscle": "lats",
+              "kind": "compound",
+              "warmup": "Warm-up: bodyweight × 5",
+              "bodyweight": true,
+              "cue": "Belt, or a dumbbell between your feet, heavy enough to fail near 10. Dead hang at the bottom of every rep: the stretch is where lats grow.",
+              "video": "weighted pull up form",
+              "busy": "Wide-grip lat pulldown — 3 × 6–10",
+              "busyNote": "Pull to your upper chest with a slight lean back. Pulldown taken too: single-arm cable pulldown, 3 × 8–12 per side.",
+              "noGym": "Pull-ups with a loaded backpack — 3 × 6–10",
+              "noGymNote": "No bar: inverted rows under a sturdy table, 3 × 10–15."
+            }
+          ]
+        },
+        {
+          "label": "Quads & side delts",
+          "rest": 60,
+          "exercises": [
+            {
+              "name": "Hack squat",
+              "sets": 3,
+              "reps": "6–10",
+              "muscle": "quads",
+              "kind": "compound",
+              "warmup": 2,
+              "cue": "Feet mid-platform. Sink as deep as you can with your lower back glued to the pad. No bar on your spine, so your back stays out of it.",
+              "video": "hack squat form Jeff Nippard",
+              "busy": "Leg press — 3 × 8–12",
+              "busyNote": "Both taken: Smith machine squat, feet slightly forward, 3 × 8–12.",
+              "noGym": "Bulgarian split squat, loaded backpack — 3 × 10–15 per leg",
+              "noGymNote": "Rear foot on a couch. A slow 3 s lowering makes it plenty hard."
+            },
+            {
+              "name": "Dumbbell lateral raise",
+              "sets": 3,
+              "reps": "10–20",
+              "muscle": "side delts",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Lean forward a touch, lead with the elbows, stop at shoulder height, 2–3 s down. Side delts are what make shoulders look wide.",
+              "video": "dumbbell lateral raise form Jeff Nippard",
+              "busy": "Cable or machine lateral raise — 3 × 10–20",
+              "busyNote": "Any version works. Keep the stop at shoulder height.",
+              "noGym": "Band lateral raise — 3 × 15–25",
+              "noGymNote": "No band: two full water bottles, 3 s lowering, to failure."
+            }
+          ]
+        },
+        {
+          "label": "Hamstrings & triceps",
+          "rest": 45,
+          "exercises": [
+            {
+              "name": "Seated leg curl",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "hamstrings",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "partial",
+              "cue": "Seated beats lying for hamstring growth: bent hips keep them stretched. Chest slightly forward, control every rep back up.",
+              "video": "seated leg curl form Jeff Nippard",
+              "busy": "Lying leg curl — 3 × 8–12",
+              "busyNote": "Both taken: Nordic curl negatives, 3 × 4–8, lowering in 4 s.",
+              "noGym": "Nordic curl negatives — 3 × 4–8",
+              "noGymNote": "Feet under a couch, lower in 4 s, push back up with your hands. Easier: towel slider curls on a smooth floor, 3 × 10–15."
+            },
+            {
+              "name": "Overhead cable triceps extension",
+              "sets": 3,
+              "reps": "10–15",
+              "muscle": "triceps",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Face away from the cable, elbows by your ears, let your hands sink deep behind your head. Grew the triceps about 40% more than pushdowns in a 12-week study.",
+              "video": "overhead cable triceps extension form",
+              "busy": "Seated single-dumbbell overhead extension — 3 × 10–15",
+              "busyNote": "Stop 1–2 reps short: the weight is behind your head.",
+              "noGym": "Bodyweight triceps extension on a table edge — 3 × 8–15",
+              "noGymNote": "Hands on the edge, body straight, bend only at the elbows. Lower the angle to make it harder."
+            }
+          ]
+        },
+        {
+          "label": "Calves & abs",
+          "rest": 30,
+          "exercises": [
+            {
+              "name": "Standing calf raise",
+              "sets": 3,
+              "reps": "10–15",
+              "muscle": "calves",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "partial",
+              "cue": "Knees straight. Sink into a full stretch, hold 1–2 s, rise all the way. No bouncing.",
+              "video": "standing calf raise form Jeff Nippard",
+              "busy": "Calf raise on the leg press — 3 × 10–15",
+              "busyNote": "Or a Smith machine calf raise on a plate. Knees straight, full stretch.",
+              "noGym": "Single-leg calf raise on a step — 3 × 15–25 per leg",
+              "noGymNote": "Hold a loaded backpack when 25 gets easy."
+            },
+            {
+              "name": "Kneeling cable crunch",
+              "sets": 3,
+              "reps": "10–15",
+              "muscle": "abs",
+              "kind": "core",
+              "warmup": 0,
+              "cue": "Hips stay put. Curl your ribs down toward your pelvis. Crunches thickened the abs more than leg raises in an ultrasound study.",
+              "video": "kneeling cable crunch form",
+              "busy": "Crunch with a plate on your chest — 3 × 10–15",
+              "busyNote": "On the floor or a decline bench. Same rule: stop 1–2 reps short.",
+              "noGym": "Crunch with arms overhead — 3 × 15–25",
+              "noGymNote": "Feet up on a couch makes it harder."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Session B",
+      "title": "Session B — Incline, rows, legs, biceps",
+      "focus": "Upper chest and back first, then a full leg session that never leaves the leg press area.",
+      "short": "upper chest, back, quads and side delts",
+      "pairs": [
+        {
+          "label": "Upper chest & back · heavy",
+          "rest": 60,
+          "exercises": [
+            {
+              "name": "Smith incline press",
+              "sets": 3,
+              "reps": "6–10",
+              "muscle": "upper chest",
+              "kind": "compound",
+              "warmup": 2,
+              "cue": "Bench at about 30°. Lower to your upper chest, elbows around 45°. Upper chest is the shelf that makes the chest look full from the front.",
+              "video": "smith machine incline press form",
+              "busy": "Incline dumbbell press, 30° — 3 × 6–10",
+              "busyNote": "With dumbbells, stop 1–2 reps short. No failure on free weights.",
+              "noGym": "Decline push-ups, feet on a couch — 3 × 8–15",
+              "noGymNote": "Higher feet means more upper chest. Backpack when 15 gets easy."
+            },
+            {
+              "name": "Seated cable row",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "mid-back",
+              "kind": "compound",
+              "warmup": 1,
+              "cue": "Let your shoulders reach forward at the stretch, then drive your elbows back. Torso stays still, which keeps your lower back out of it.",
+              "video": "seated cable row form Jeff Nippard",
+              "busy": "Chest-supported row, machine or T-bar — 3 × 8–12",
+              "busyNote": "Chest on the pad keeps your lower back out of it.",
+              "noGym": "Inverted row under a table — 3 × 8–15",
+              "noGymNote": "Feet farther forward makes it harder."
+            }
+          ]
+        },
+        {
+          "label": "Quads & side delts",
+          "rest": 45,
+          "note": "Bring a bench and your dumbbells to the leg press. You'll use the bench again in Pair 3.",
+          "exercises": [
+            {
+              "name": "Leg press",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "quads",
+              "kind": "compound",
+              "warmup": 2,
+              "cue": "As deep as you can with your lower back flat on the pad. Keep the machine: calves come next on it.",
+              "video": "leg press form Jeff Nippard",
+              "busy": "Hack squat — 3 × 8–12",
+              "busyNote": "Both taken: Smith machine squat, feet forward, 3 × 8–12.",
+              "noGym": "Bulgarian split squat — 3 × 10–15 per leg",
+              "noGymNote": "Loaded backpack, 3 s lowering."
+            },
+            {
+              "name": "Seated dumbbell lateral raise",
+              "sets": 3,
+              "reps": "12–20",
+              "muscle": "side delts",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Sitting kills the hip swing. Elbows lead, stop at shoulder height, 2–3 s down.",
+              "video": "seated dumbbell lateral raise form",
+              "busy": "Machine or cable lateral raise — 3 × 12–20",
+              "busyNote": "Stop at shoulder height.",
+              "noGym": "Band lateral raise — 3 × 15–25",
+              "noGymNote": "No band: two water bottles, slow."
+            }
+          ]
+        },
+        {
+          "label": "Calves & abs",
+          "rest": 30,
+          "note": "Stay on the leg press: change the plates once, no new setup.",
+          "exercises": [
+            {
+              "name": "Leg press calf raise",
+              "sets": 3,
+              "reps": "10–15",
+              "muscle": "calves",
+              "kind": "isolation",
+              "warmup": 0,
+              "technique": "partial",
+              "cue": "Balls of your feet on the bottom edge, knees straight, 1–2 s pause in the deep stretch.",
+              "video": "leg press calf raise form",
+              "busy": "Standing calf raise — 3 × 10–15",
+              "busyNote": "Or a Smith machine calf raise on a plate.",
+              "noGym": "Single-leg calf raise on a step — 3 × 15–25 per leg",
+              "noGymNote": "Pause 2 s at the bottom of every rep."
+            },
+            {
+              "name": "Lying reverse crunch",
+              "sets": 3,
+              "reps": "10–15",
+              "muscle": "abs",
+              "kind": "core",
+              "warmup": 0,
+              "cue": "On the bench by the leg press. Curl your pelvis up toward your ribs, lower slowly. Add ankle weights when 15 gets easy.",
+              "video": "lying reverse crunch form",
+              "busy": "Hanging knee raise — 3 × 10–15",
+              "busyNote": "Curl the pelvis up, no swinging.",
+              "noGym": "Already bodyweight: keep it",
+              "noGymNote": "Harder: straighter legs and a slower lowering."
+            }
+          ]
+        },
+        {
+          "label": "Hamstrings & biceps",
+          "rest": 45,
+          "note": "Grab a bench and dumbbells next to the leg curl.",
+          "exercises": [
+            {
+              "name": "Seated leg curl",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "hamstrings",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "partial",
+              "cue": "Same as Session A: squeeze hard, then fight the weight on the way back to the stretch.",
+              "video": "seated leg curl form Jeff Nippard",
+              "busy": "Lying leg curl — 3 × 8–12",
+              "busyNote": "Both taken: Nordic curl negatives, 3 × 4–8, lowering in 4 s.",
+              "noGym": "Nordic curl negatives — 3 × 4–8",
+              "noGymNote": "Feet under a couch, lower in 4 s, push back up with your hands. Easier: towel slider curls on a smooth floor, 3 × 10–15."
+            },
+            {
+              "name": "Incline dumbbell curl",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "biceps",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "partial",
+              "cue": "Bench at 45°, arms hanging behind your body. That stretched start is where the biceps grow most.",
+              "video": "incline dumbbell curl form Jeff Nippard",
+              "busy": "Bayesian cable curl — 3 × 8–12",
+              "busyNote": "Face away from a low pulley, arm behind your body.",
+              "noGym": "Chin-ups, palms toward you — 3 × 6–12",
+              "noGymNote": "No bar: backpack curls, 3 s lowering, 3 × 10–15."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Session C",
+      "title": "Session C — Delts, arms, chest & lats",
+      "focus": "Frame day: extra work for shoulders, arms, chest and lats. Mostly cables and machines, quick to set up.",
+      "short": "side and rear delts, chest and lats",
+      "pairs": [
+        {
+          "label": "Side & rear delts",
+          "rest": 30,
+          "note": "One cable crossover for both: low pulleys for the raise, shoulder height for the fly.",
+          "exercises": [
+            {
+              "name": "Cable Y-raise",
+              "sets": 4,
+              "reps": "10–20",
+              "muscle": "side delts",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Both arms, cables crossed from the low pulleys. Sweep out to a wide Y at shoulder height. Your widest-shoulder exercise of the week.",
+              "video": "cable Y raise Jeff Nippard",
+              "busy": "Machine lateral raise — 4 × 10–20",
+              "busyNote": "Or dumbbell lateral raise. Stop at shoulder height.",
+              "noGym": "Band Y-raise — 4 × 15–25",
+              "noGymNote": "No band: water bottles, slow lowering, to failure."
+            },
+            {
+              "name": "Reverse cable fly",
+              "sets": 3,
+              "reps": "12–20",
+              "muscle": "rear delts",
+              "kind": "isolation",
+              "warmup": 0,
+              "technique": "myo",
+              "cue": "Cables crossed at shoulder height, arms long. Sweep back and turn your thumbs back at the end. Rear delts round the shoulder from the side.",
+              "video": "reverse cable fly rear delt form",
+              "busy": "Reverse pec deck — 3 × 12–20",
+              "busyNote": "Or chest-supported dumbbell reverse fly on a 30° bench.",
+              "noGym": "Band pull-apart — 3 × 15–25",
+              "noGymNote": "No band: face-down Y-raises on the floor, thumbs up, 3 × 12–20."
+            }
+          ]
+        },
+        {
+          "label": "Chest & lats · machines",
+          "rest": 45,
+          "exercises": [
+            {
+              "name": "Machine chest press",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "chest",
+              "kind": "compound",
+              "warmup": 1,
+              "cue": "Start from a deep stretch, no bounce at the bottom. Safe to push hard here.",
+              "video": "machine chest press form",
+              "busy": "Dumbbell bench press — 3 × 8–12",
+              "busyNote": "Stop 1–2 reps short with dumbbells.",
+              "noGym": "Push-ups, hands on two books — 3 × to failure",
+              "noGymNote": "Deeper range puts more stretch on the chest."
+            },
+            {
+              "name": "Neutral-grip lat pulldown",
+              "sets": 3,
+              "reps": "8–12",
+              "muscle": "lats",
+              "kind": "compound",
+              "warmup": 1,
+              "cue": "Let the stack pull your arms all the way up, then drive your elbows down to your ribs.",
+              "video": "neutral grip lat pulldown form",
+              "busy": "Neutral-grip pull-up — 3 × 8–12",
+              "busyNote": "Or single-arm cable pulldown, 3 × 10–12 per side.",
+              "noGym": "Pull-ups — 3 × 8–15",
+              "noGymNote": "No bar: inverted rows under a table."
+            }
+          ]
+        },
+        {
+          "label": "Arms",
+          "rest": 30,
+          "note": "Same cable station: high pulley for the pushdown, low pulley for the curl.",
+          "exercises": [
+            {
+              "name": "Rope pushdown",
+              "sets": 4,
+              "reps": "10–15",
+              "muscle": "triceps",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Elbows pinned to your sides, split the rope at the bottom. With Session A's overhead work, both triceps angles are covered.",
+              "video": "rope pushdown form",
+              "busy": "Straight-bar pushdown — 4 × 10–15",
+              "busyNote": "Or dips on the assisted machine, elbows back.",
+              "noGym": "Diamond push-ups — 4 × 8–20",
+              "noGymNote": "Or bench dips between two chairs, if your shoulders like them."
+            },
+            {
+              "name": "Bayesian cable curl",
+              "sets": 4,
+              "reps": "10–15",
+              "muscle": "biceps",
+              "kind": "isolation",
+              "warmup": 1,
+              "technique": "myo",
+              "cue": "Face away from a low pulley and step forward so your arm trails behind you. You curl out of the stretch.",
+              "video": "bayesian cable curl form",
+              "busy": "Incline dumbbell curl — 4 × 10–15",
+              "busyNote": "Bench at 45°, arms behind you.",
+              "noGym": "Chin-ups, palms toward you — 4 × 6–12",
+              "noGymNote": "No bar: backpack curls."
+            }
+          ]
+        },
+        {
+          "label": "Chest & lats · stretch finish",
+          "rest": 30,
+          "note": "Back on the crossover: low pulleys for the fly, high pulley for the pulldown.",
+          "exercises": [
+            {
+              "name": "Low-to-high cable fly",
+              "sets": 2,
+              "reps": "10–15",
+              "muscle": "upper chest",
+              "kind": "isolation",
+              "warmup": 0,
+              "technique": "partial",
+              "cue": "Pulleys low, sweep your hands up to chin height. Feel the stretch across your chest at the bottom.",
+              "video": "low to high cable fly form",
+              "busy": "Pec deck — 2 × 10–15",
+              "busyNote": "Or incline dumbbell fly at 30°.",
+              "noGym": "Wide push-ups — 2 × to failure",
+              "noGymNote": "Hands on books for depth."
+            },
+            {
+              "name": "Straight-arm cable pulldown",
+              "sets": 2,
+              "reps": "12–15",
+              "muscle": "lats",
+              "kind": "isolation",
+              "warmup": 0,
+              "technique": "myo",
+              "cue": "Arms almost straight, hips back a little, sweep the bar down to your thighs. Lats only, no biceps.",
+              "video": "straight arm cable pulldown form",
+              "busy": "Dumbbell pullover on a bench — 2 × 12–15",
+              "busyNote": "Hips low, feel the lats stretch overhead.",
+              "noGym": "Band straight-arm pulldown — 2 × 15–25",
+              "noGymNote": "No band: slow inverted rows, 2 × 10–15."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "guide": [
+    {
+      "title": "How to run your week",
+      "highlight": true,
+      "rows": [
+        [
+          "3 days",
+          "A → B → C, with a rest day between when you can (Mon · Wed · Fri works). Back-to-back days are fine too."
+        ],
+        [
+          "2 days",
+          "Tap <i>Only 2 days</i> at the top. Session C turns blue and splits: Pairs 1–2 go after Session A, Pairs 3–4 after Session B. Do them as long as you can, and split whatever’s left into 10–15 min mini-sessions that week."
+        ],
+        [
+          "1 day",
+          "Do the session you did longest ago, in Short mode if you need it. A week like that keeps your muscle. It doesn’t undo anything."
+        ],
+        [
+          "Week 9",
+          "Deload: half the sets, same weights. Then start again at week 1 with your new numbers."
+        ]
+      ]
+    },
+    {
+      "title": "If this happens, do this",
+      "rows": [
+        [
+          "Under 40 min",
+          "Tap <i>Short</i>: Pairs 1–2 only, about 30 min."
+        ],
+        [
+          "Machine taken",
+          "Tap <i>Busy</i> under that exercise."
+        ],
+        [
+          "No gym",
+          "Tap <i>No gym</i> under each exercise. Same sets and reps."
+        ],
+        [
+          "Gym packed",
+          "Can’t hold two stations? Do each exercise on its own: 90 s between sets, 2 min on the heavy lifts."
+        ],
+        [
+          "Bad sleep",
+          "Under 6 h or wiped out: Short mode, every set 2–3 reps short. A short session still counts."
+        ],
+        [
+          "Lower back",
+          "A twinge: stop the set and finish with the <i>Busy</i> version. Pain running down the leg, or still there next session: skip leg work and get it checked first."
+        ],
+        [
+          "Sharp pain",
+          "Anywhere, and not the burn: stop that exercise and use <i>Busy</i>. Still hurts: skip it and write it in Notes."
+        ],
+        [
+          "Weeks 4 & 8",
+          "Check-in: weigh in on the same scale, in the morning before eating, plus tape measurements. Send the numbers to your coach."
+        ],
+        [
+          "New phone",
+          "Sign in with the same email. Your log is saved to your account, not the phone."
+        ]
+      ]
+    }
+  ],
+  "footer": "Your coach sees your log as you train. Week 9 done: send your coach your new measurements."
+}
