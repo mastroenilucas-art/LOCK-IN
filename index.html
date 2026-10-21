@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ANDREW — LOCK IN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script>
+(function(){try{var t=localStorage.getItem("lockin-andrew:theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one 660px phone-first column. Week bar, this-week strip, session tabs, collapsible pair cards; save bar and rest timer pinned to the bottom edge. */
+:root{
+  --ink:#F2F0EB; --panel:#FFFFFF; --edge:#D6D2C8; --edge2:#BFBAAE;
+  --text:#1B242C; --dim:#5E6A75; --lit:#FFF8EC; --litedge:#E0A86B;
+  --amp:#B3561A; --go:#177A67; --flag:#B0402F;
+  --fold:#2B679C; --foldbg:#ECF2F8; --foldedge:#A3BFD9;
+  --shadow:0 1px 0 rgba(27,36,44,.06);
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#10161C; --panel:#182028; --edge:#2A3843; --edge2:#3B4C59;
+    --text:#D8E0E6; --dim:#8696A3; --lit:#22262A; --litedge:#8A5A24;
+    --amp:#E8873A; --go:#5BC0A8; --flag:#E2705F;
+    --fold:#88B8E4; --foldbg:#162331; --foldedge:#35587C;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#10161C; --panel:#182028; --edge:#2A3843; --edge2:#3B4C59;
+  --text:#D8E0E6; --dim:#8696A3; --lit:#22262A; --litedge:#8A5A24;
+  --amp:#E8873A; --go:#5BC0A8; --flag:#E2705F;
+  --fold:#88B8E4; --foldbg:#162331; --foldedge:#35587C;
+  --shadow:none; color-scheme:dark;
+}
+[hidden]{display:none!important}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--ink); color:var(--text);
+  font-family:var(--body); font-size:15.5px; line-height:1.48;
+  -webkit-text-size-adjust:100%; font-variant-numeric:tabular-nums;
+}
+.wrap{
+  max-width:660px; margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 124px;
+}
+a{color:var(--amp)}
+:focus-visible{outline:2px solid var(--amp);outline-offset:2px}
+
+header{padding:20px 0 6px}
+.htop{display:flex;align-items:flex-start;gap:10px}
+h1{flex:1;font-family:var(--display);font-size:31px;line-height:.98;letter-spacing:.02em;margin:0;font-weight:700;text-wrap:balance}
+header .meta{color:var(--dim);font-size:13.5px;margin:6px 0 0;max-width:56ch}
+#theme{flex:0 0 auto;padding:9px 12px;border:1px solid var(--edge);border-radius:3px;background:var(--panel);
+  color:var(--dim);font-family:var(--display);font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap}
+
+.weeks{display:flex;gap:3px;margin:14px 0 4px}
+.weeks button{flex:1;min-width:0;padding:10px 0 8px;border:1px solid var(--edge);background:var(--panel);
+  color:var(--dim);font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;border-radius:3px}
+.weeks button[aria-pressed="true"]{background:var(--amp);border-color:var(--amp);color:var(--ink)}
+.weeks button.dl{font-size:12.5px}
+.phase{font-size:13px;color:var(--dim);padding:6px 0 0;min-height:19px}
+.phase b{color:var(--text);font-weight:600}
+
+.strip{border:1px solid var(--edge);border-radius:4px;background:var(--panel);padding:10px 12px;margin:12px 0 0;display:grid;gap:6px}
+.strip.two{border-color:var(--foldedge);background:var(--foldbg)}
+.strip-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eyebrow{flex:1;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.strip.two .eyebrow{color:var(--fold)}
+.strip p{margin:0;font-size:13.5px;min-width:0}
+.daysel{display:flex;gap:3px}
+.daysel button{padding:8px 12px;border:1px solid var(--edge);border-radius:3px;background:var(--panel);color:var(--dim);
+  cursor:pointer;font-family:var(--display);font-weight:600;font-size:14px}
+.daysel button[aria-pressed="true"]{border-color:var(--text);color:var(--text)}
+.daysel button[data-days="2"][aria-pressed="true"]{border-color:var(--fold);color:var(--fold)}
+
+nav.tabs{display:flex;gap:2px;margin:14px 0 14px}
+nav.tabs button{flex:1;min-width:0;padding:11px 4px;border:1px solid var(--edge);border-radius:3px;background:transparent;
+  color:var(--dim);cursor:pointer;font-family:var(--display);font-weight:600;font-size:16px}
+nav.tabs button[aria-selected="true"]{background:var(--text);border-color:var(--text);color:var(--ink)}
+
+.block{border:1px solid var(--edge);border-radius:4px;background:var(--panel);padding:13px 14px;margin-bottom:11px;box-shadow:var(--shadow)}
+.block h3{font-family:var(--display);font-size:19px;margin:0 0 6px;font-weight:600;text-wrap:balance}
+.block p{margin:0 0 8px;font-size:14.5px}
+.block p:last-child{margin-bottom:0}
+.block ol,.block ul{margin:0;padding-left:19px;font-size:14.5px}
+.block li{margin-bottom:5px}
+.block li:last-child{margin-bottom:0}
+.sub2{font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--amp)}
+.note{font-size:12.5px;color:var(--dim)}
+.prio{border-left:3px solid var(--amp)}
+.foldnote{border-left:3px solid var(--fold);background:var(--foldbg);border-color:var(--foldedge)}
+.foldnote h3{color:var(--fold)}
+
+.modes{display:flex;gap:3px;margin-bottom:12px}
+.modes button{flex:1;min-width:0;padding:11px 4px;border:1px solid var(--edge);border-radius:3px;background:var(--panel);
+  color:var(--dim);cursor:pointer;font-family:var(--display);font-weight:600;font-size:14.5px}
+.modes button[aria-pressed="true"]{border-color:var(--amp);color:var(--amp)}
+
+.pair{border:1px solid var(--edge);border-radius:4px;background:var(--panel);margin-bottom:10px;overflow:hidden}
+.pair.open{background:var(--lit);border-color:var(--litedge)}
+.pair.fold{background:var(--foldbg);border-color:var(--foldedge)}
+.pair.fold.open{border-color:var(--fold)}
+.pair.cut{opacity:.4}
+.pair-head{display:flex;align-items:baseline;gap:9px;padding:13px;cursor:pointer;width:100%;border:0;background:transparent;color:inherit;text-align:left;font:inherit}
+.pair-head .n{font-family:var(--display);font-weight:700;font-size:15px;color:var(--amp);flex:0 0 auto}
+.pair.fold .pair-head .n{color:var(--fold)}
+.pair-head .lbl{flex:1;min-width:0;font-weight:600;font-size:15px}
+.pair-head .rs{font-size:12.5px;color:var(--dim);flex:0 0 auto;font-family:var(--display)}
+.chip{display:inline-block;font-family:var(--display);font-size:12.5px;font-weight:600;color:var(--fold);border:1px solid var(--foldedge);
+  border-radius:999px;padding:0 8px;margin-left:4px;white-space:nowrap;vertical-align:1px}
+.pair-body{padding:0 13px 12px;display:none}
+.pair.open .pair-body{display:block}
+.samemachine{font-size:12.5px;color:var(--amp);font-style:italic;margin:0 0 6px}
+.pair.fold .samemachine{color:var(--fold)}
+
+.ex{margin-top:11px;padding-top:11px;border-top:1px solid var(--edge)}
+.ex:first-of-type{border-top:0;padding-top:2px;margin-top:0}
+.ex-top{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-bottom:1px}
+.ex-name{font-weight:600;font-size:15.5px}
+.ex-range{font-family:var(--display);font-size:15px;color:var(--amp);font-weight:700}
+.ex-tag{font-family:var(--display);font-size:13px;color:var(--dim);font-weight:600;text-transform:lowercase}
+.vid{font-size:12.5px;text-decoration:none;color:var(--dim);border-bottom:1px solid var(--edge2)}
+.eff{font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--text);margin:2px 0 3px}
+.eff::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amp);margin-right:6px;vertical-align:1px}
+.tech{font-size:13.5px;margin:0 0 5px;padding:6px 9px;border-radius:3px;background:var(--lit);border:1px solid var(--litedge)}
+.wu{font-size:12.5px;color:var(--dim);margin:0 0 3px}
+.ex-cue{font-size:12.8px;color:var(--dim);margin:0 0 7px;max-width:60ch}
+.hint{font-size:13.5px;margin:0 0 8px;padding:6px 9px;border-radius:3px;border:1px solid var(--edge);font-weight:500}
+.hint.up{border-color:var(--go);color:var(--go)}
+.hint.stall{border-color:var(--flag);color:var(--flag)}
+.hint.heavy{border-color:var(--amp);color:var(--amp)}
+.hint.keep{color:var(--dim)}
+
+.sets{display:flex;gap:5px;flex-wrap:wrap}
+.set{display:flex;align-items:center;gap:2px;border:1px solid var(--edge);border-radius:3px;padding:4px 5px;background:var(--ink)}
+.set.done{border-color:var(--go)}
+.set.off{opacity:.3}
+.set input{width:42px;border:0;background:transparent;color:var(--text);font:inherit;font-weight:600;font-size:16px;text-align:center;padding:4px 0;font-variant-numeric:tabular-nums}
+.set input::placeholder{color:var(--dim);font-weight:400;font-size:14px}
+.set .x{color:var(--dim);font-size:12px}
+.prev{font-size:12.5px;color:var(--dim);margin-top:5px;font-family:var(--display)}
+
+.altrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.restbtn,.altbtn{padding:8px 13px;border:1px solid var(--edge2);border-radius:3px;background:transparent;color:var(--dim);
+  font-family:var(--display);font-weight:600;font-size:13.5px;cursor:pointer}
+.restbtn{color:var(--text);border-color:var(--text)}
+.altbtn[aria-expanded="true"]{border-color:var(--amp);color:var(--amp)}
+.subst{margin-top:8px;padding:10px 12px;border:1px solid var(--edge);border-left:3px solid var(--amp);border-radius:3px;background:var(--ink);font-size:13.5px;line-height:1.45}
+.subst b{font-family:var(--display);font-size:15px;color:var(--amp);display:block;margin-bottom:3px}
+.subst .fall{display:block;margin-top:5px;color:var(--dim);font-size:12.5px}
+
+textarea{width:100%;background:var(--ink);border:1px solid var(--edge);border-radius:3px;color:var(--text);padding:9px;font-family:inherit;font-size:14.5px;min-height:74px;resize:vertical}
+
+.row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--edge);font-size:14px;align-items:baseline}
+.row:last-child{border-bottom:0}
+.row b{flex:0 0 96px;font-family:var(--display);font-weight:600;color:var(--amp);font-size:15px}
+.row span{flex:1;min-width:0}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--edge2);
+  padding:9px max(16px, env(safe-area-inset-right, 0px)) calc(9px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  display:flex;gap:8px;align-items:center}
+.bar .status{flex:1;min-width:0;font-size:12.5px;color:var(--dim)}
+.bar .status.ok{color:var(--go)}
+.bar button{padding:11px 15px;border-radius:3px;border:1px solid var(--edge2);cursor:pointer;
+  font-family:var(--display);font-weight:700;font-size:15px;background:transparent;color:var(--text)}
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--amp);color:var(--ink);
+  padding:14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  display:flex;align-items:center;gap:12px}
+.timer .t{font-family:var(--display);font-weight:700;font-size:38px;line-height:1;flex:0 0 auto}
+.timer .w{flex:1;min-width:0;font-size:14px;line-height:1.3;font-weight:600}
+.timer button{background:rgba(0,0,0,.22);border:0;color:inherit;padding:10px 14px;border-radius:3px;
+  font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer}
+.drain{position:absolute;left:0;top:0;height:3px;background:rgba(0,0,0,.35)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--panel);border-top:1px solid var(--edge2);
+  padding:12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  display:grid;gap:8px}
+.sheet .sh{display:flex;align-items:center;gap:10px}
+.sheet .sh b{flex:1;font-family:var(--display);font-size:17px}
+.sheet textarea{min-height:38vh;font-size:13px}
+.sheet button{padding:9px 14px;border-radius:3px;border:1px solid var(--edge2);background:transparent;color:var(--text);cursor:pointer;font-family:var(--display);font-weight:700;font-size:14.5px}
+footer{margin-top:24px;padding-top:13px;border-top:1px solid var(--edge);color:var(--dim);font-size:12.5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="htop">
+    <h1>ANDREW — LOCK IN</h1>
+    <button id="theme" type="button">Dark mode</button>
+  </div>
+  <p class="meta">Block 1 · 8 weeks + deload · Sessions A, B, C · built for the Dolph frame: delts, upper chest, lats and arms first · saves on every tap</p>
+</header>
+
+<div class="weeks" id="weeks" role="group" aria-label="Week"></div>
+<div class="phase" id="phase"></div>
+
+<section class="strip" id="strip" aria-label="This week">
+  <div class="strip-top">
+    <span class="eyebrow" id="stripEye">This week</span>
+    <div class="daysel" role="group" aria-label="Training days this week">
+      <button type="button" data-days="3" aria-pressed="true">3 days</button>
+      <button type="button" data-days="2" aria-pressed="false">Only 2 days</button>
+    </div>
+  </div>
+  <p id="stripText"></p>
+</section>
+
+<nav class="tabs" id="tabs" role="tablist">
+  <button type="button" role="tab" data-tab="A" aria-selected="true">Session A</button>
+  <button type="button" role="tab" data-tab="B" aria-selected="false">Session B</button>
+  <button type="button" role="tab" data-tab="C" aria-selected="false">Session C</button>
+  <button type="button" role="tab" data-tab="P" aria-selected="false">Plan</button>
+</nav>
+
+<section id="tab-A"></section>
+<section id="tab-B" hidden></section>
+<section id="tab-C" hidden></section>
+
+<section id="tab-P" hidden>
+  <div class="block prio">
+    <h3>How to run your week</h3>
+    <div class="row"><b>3 days</b><span>A → B → C, with a rest day between when you can (Mon · Wed · Fri works). Back-to-back days are fine too.</span></div>
+    <div class="row"><b>2 days</b><span>Tap <i>Only 2 days</i> at the top. Day C turns blue and splits: Pairs 1–2 go after Session A, Pairs 3–4 after Session B. Do them as long as you can, and split whatever's left into 10–15 min mini-sessions that week.</span></div>
+    <div class="row"><b>1 day</b><span>Do the session you did longest ago, in Short mode if you need it. A week like that keeps your muscle. It doesn't undo anything.</span></div>
+    <div class="row"><b>Week 9</b><span>Deload: half the sets, same weights. Then start again at week 1 with your new numbers.</span></div>
+  </div>
+
+  <div class="block">
+    <h3>If this happens, do this</h3>
+    <div class="row"><b>Under 40 min</b><span>Tap <i>Short</i>: Pairs 1–2 only, about 30 min.</span></div>
+    <div class="row"><b>Machine taken</b><span>Tap <i>Busy</i> under that exercise.</span></div>
+    <div class="row"><b>No gym</b><span>Tap <i>No gym</i> under each exercise. Same sets and reps.</span></div>
+    <div class="row"><b>Gym packed</b><span>Can't hold two stations? Do each exercise on its own: 90 s between sets, 2 min on the heavy lifts.</span></div>
+    <div class="row"><b>Bad sleep</b><span>Under 6 h or wiped out: Short mode, every set 2–3 reps short. A short session still counts.</span></div>
+    <div class="row"><b>Lower back</b><span>A twinge: stop the set and finish with the <i>Busy</i> version. Pain running down the leg, or still there next session: skip leg work and get it checked first.</span></div>
+    <div class="row"><b>Sharp pain</b><span>Anywhere, and not the burn: stop that exercise and use <i>Busy</i>. Still hurts: skip it and write it in Notes.</span></div>
+    <div class="row"><b>Rugby again</b><span>Drop the last set of every leg exercise. Upper body stays the same.</span></div>
+    <div class="row"><b>Weeks 4 &amp; 8</b><span>BIA on the same scale, in the morning before eating, plus tape measurements. Tap <i>Summary</i> and send it with the numbers.</span></div>
+    <div class="row"><b>New phone</b><span>Your logs live in this browser. Open the link in the same browser every time, and tap <i>Summary</i> before you switch.</span></div>
+  </div>
+</section>
+
+<footer>
+  ANDREW — LOCK IN · Block 1<br>
+  Week 9 done: tap Summary and send it with your new measurements.
+</footer>
+</div>
+
+<div class="bar">
+  <span class="status" id="status">Ready.</span>
+  <button id="export" type="button">Summary</button>
+</div>
+
+<div class="timer" id="timer" hidden>
+  <div class="drain" id="drain"></div>
+  <span class="t" id="tClock">0:00</span>
+  <span class="w" id="tWhat"></span>
+  <button id="tSkip" type="button">Skip</button>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sh"><b>Summary</b><button id="sheetClose" type="button">Close</button></div>
+  <label for="sumtext" class="note">Copy this and send it.</label>
+  <textarea id="sumtext" readonly></textarea>
+</div>
+
+<script>
+function yt(q){ return "https://www.youtube.com/results?search_query=" + encodeURIComponent(q); }
+
+/* cls: free = free-weight compound (never to failure) · comp = machine/cable/bodyweight compound · iso = isolation · core = loaded spinal flexion
+   wu: 2 = two ramp sets · 1 = one light set · string = custom · 0 = none
+   tech (weeks 5–8, last set): myo = myo-reps · partial = lengthened partials */
+const PLAN = {
+  A:{ title:"Session A — Bench, pull-ups, legs",
+      focus:"Strength day: your heaviest pressing and pulling while you're fresh.",
+      short:"chest, lats, quads and side delts",
+      pairs:[
+    {n:1, rest:60, lbl:"Chest & lats · heavy", ex:[
+      {name:"Barbell bench press", sets:3, range:"5–8", tag:"chest", cls:"free", wu:2,
+       cue:"Shoulder blades pinned, feet planted, touch your lower chest. This is your strength number: set the safety pins and never grind the last rep alone.",
+       v:"bench press technique Jeff Nippard"},
+      {name:"Weighted pull-up", sets:3, range:"6–10", tag:"lats", cls:"comp", wu:"Warm-up: bodyweight × 5", bw:true,
+       cue:"Belt, or a dumbbell between your feet, heavy enough to fail near 10. Dead hang at the bottom of every rep: the stretch is where lats grow.",
+       v:"weighted pull up form"}
+    ]},
+    {n:2, rest:60, lbl:"Quads & side delts", ex:[
+      {name:"Hack squat", sets:3, range:"6–10", tag:"quads", cls:"comp", wu:2,
+       cue:"Feet mid-platform. Sink as deep as you can with your lower back glued to the pad. No bar on your spine, so your back stays out of it.",
+       v:"hack squat form Jeff Nippard"},
+      {name:"Dumbbell lateral raise", sets:3, range:"10–20", tag:"side delts", cls:"iso", wu:1, tech:"myo",
+       cue:"Lean forward a touch, lead with the elbows, stop at shoulder height, 2–3 s down. Side delts are the width of the Dolph frame.",
+       v:"dumbbell lateral raise form Jeff Nippard"}
+    ]},
+    {n:3, rest:45, lbl:"Hamstrings & triceps", ex:[
+      {name:"Seated leg curl", sets:3, range:"8–12", tag:"hamstrings", cls:"iso", wu:1, tech:"partial",
+       cue:"Seated beats lying for hamstring growth: bent hips keep them stretched. Chest slightly forward, control every rep back up.",
+       v:"seated leg curl form Jeff Nippard"},
+      {name:"Overhead cable triceps extension", sets:3, range:"10–15", tag:"triceps", cls:"iso", wu:1, tech:"myo",
+       cue:"Face away from the cable, elbows by your ears, let your hands sink deep behind your head. Grew the triceps about 40% more than pushdowns in a 12-week study.",
+       v:"overhead cable triceps extension form"}
+    ]},
+    {n:4, rest:30, lbl:"Calves & abs", ex:[
+      {name:"Standing calf raise", sets:3, range:"10–15", tag:"calves", cls:"iso", wu:1, tech:"partial",
+       cue:"Knees straight. Sink into a full stretch, hold 1–2 s, rise all the way. No bouncing.",
+       v:"standing calf raise form Jeff Nippard"},
+      {name:"Kneeling cable crunch", sets:3, range:"10–15", tag:"abs", cls:"core", wu:0,
+       cue:"Hips stay put. Curl your ribs down toward your pelvis. Crunches thickened the abs more than leg raises in an ultrasound study.",
+       v:"kneeling cable crunch form"}
+    ]}
+  ]},
+
+  B:{ title:"Session B — Incline, rows, legs, biceps",
+      focus:"Upper chest and back first, then a full leg session that never leaves the leg press area.",
+      short:"upper chest, back, quads and side delts",
+      pairs:[
+    {n:1, rest:60, lbl:"Upper chest & back · heavy", ex:[
+      {name:"Smith incline press", sets:3, range:"6–10", tag:"upper chest", cls:"comp", wu:2,
+       cue:"Bench at about 30°. Lower to your upper chest, elbows around 45°. Upper chest is the shelf that makes the chest look full from the front.",
+       v:"smith machine incline press form"},
+      {name:"Seated cable row", sets:3, range:"8–12", tag:"mid-back", cls:"comp", wu:1,
+       cue:"Let your shoulders reach forward at the stretch, then drive your elbows back. Torso stays still, which keeps your lower back out of it.",
+       v:"seated cable row form Jeff Nippard"}
+    ]},
+    {n:2, rest:45, lbl:"Quads & side delts", same:"Bring a bench and your dumbbells to the leg press. You'll use the bench again in Pair 3.", ex:[
+      {name:"Leg press", sets:3, range:"8–12", tag:"quads", cls:"comp", wu:2,
+       cue:"As deep as you can with your lower back flat on the pad. Keep the machine: calves come next on it.",
+       v:"leg press form Jeff Nippard"},
+      {name:"Seated dumbbell lateral raise", sets:3, range:"12–20", tag:"side delts", cls:"iso", wu:1, tech:"myo",
+       cue:"Sitting kills the hip swing. Elbows lead, stop at shoulder height, 2–3 s down.",
+       v:"seated dumbbell lateral raise form"}
+    ]},
+    {n:3, rest:30, lbl:"Calves & abs", same:"Stay on the leg press: change the plates once, no new setup.", ex:[
+      {name:"Leg press calf raise", sets:3, range:"10–15", tag:"calves", cls:"iso", wu:0, tech:"partial",
+       cue:"Balls of your feet on the bottom edge, knees straight, 1–2 s pause in the deep stretch.",
+       v:"leg press calf raise form"},
+      {name:"Lying reverse crunch", sets:3, range:"10–15", tag:"abs", cls:"core", wu:0,
+       cue:"On the bench by the leg press. Curl your pelvis up toward your ribs, lower slowly. Add ankle weights when 15 gets easy.",
+       v:"lying reverse crunch form"}
+    ]},
+    {n:4, rest:45, lbl:"Hamstrings & biceps", same:"Grab a bench and dumbbells next to the leg curl.", ex:[
+      {name:"Seated leg curl", sets:3, range:"8–12", tag:"hamstrings", cls:"iso", wu:1, tech:"partial",
+       cue:"Same as Session A: squeeze hard, then fight the weight on the way back to the stretch.",
+       v:"seated leg curl form Jeff Nippard"},
+      {name:"Incline dumbbell curl", sets:3, range:"8–12", tag:"biceps", cls:"iso", wu:1, tech:"partial",
+       cue:"Bench at 45°, arms hanging behind your body. That stretched start is where the biceps grow most.",
+       v:"incline dumbbell curl form Jeff Nippard"}
+    ]}
+  ]},
+
+  C:{ title:"Session C — Delts, arms, chest & lats",
+      focus:"The Dolph day: extra work on what builds the frame. Mostly cables and machines, quick to set up.",
+      short:"side and rear delts, chest and lats",
+      pairs:[
+    {n:1, rest:30, lbl:"Side & rear delts", same:"One cable crossover for both: low pulleys for the raise, shoulder height for the fly.", ex:[
+      {name:"Cable Y-raise", sets:4, range:"10–20", tag:"side delts", cls:"iso", wu:1, tech:"myo",
+       cue:"Both arms, cables crossed from the low pulleys. Sweep out to a wide Y at shoulder height. Your widest-shoulder exercise of the week.",
+       v:"cable Y raise Jeff Nippard"},
+      {name:"Reverse cable fly", sets:3, range:"12–20", tag:"rear delts", cls:"iso", wu:0, tech:"myo",
+       cue:"Cables crossed at shoulder height, arms long. Sweep back and turn your thumbs back at the end. Rear delts round the shoulder from the side.",
+       v:"reverse cable fly rear delt form"}
+    ]},
+    {n:2, rest:45, lbl:"Chest & lats · machines", ex:[
+      {name:"Machine chest press", sets:3, range:"8–12", tag:"chest", cls:"comp", wu:1,
+       cue:"Start from a deep stretch, no bounce at the bottom. Safe to push hard here.",
+       v:"machine chest press form"},
+      {name:"Neutral-grip lat pulldown", sets:3, range:"8–12", tag:"lats", cls:"comp", wu:1,
+       cue:"Let the stack pull your arms all the way up, then drive your elbows down to your ribs.",
+       v:"neutral grip lat pulldown form"}
+    ]},
+    {n:3, rest:30, lbl:"Arms", same:"Same cable station: high pulley for the pushdown, low pulley for the curl.", ex:[
+      {name:"Rope pushdown", sets:4, range:"10–15", tag:"triceps", cls:"iso", wu:1, tech:"myo",
+       cue:"Elbows pinned to your sides, split the rope at the bottom. With Session A's overhead work, both triceps angles are covered.",
+       v:"rope pushdown form"},
+      {name:"Bayesian cable curl", sets:4, range:"10–15", tag:"biceps", cls:"iso", wu:1, tech:"myo",
+       cue:"Face away from a low pulley and step forward so your arm trails behind you. You curl out of the stretch.",
+       v:"bayesian cable curl form"}
+    ]},
+    {n:4, rest:30, lbl:"Chest & lats · stretch finish", same:"Back on the crossover: low pulleys for the fly, high pulley for the pulldown.", ex:[
+      {name:"Low-to-high cable fly", sets:2, range:"10–15", tag:"upper chest", cls:"iso", wu:0, tech:"partial",
+       cue:"Pulleys low, sweep your hands up to chin height. Feel the stretch across your chest at the bottom.",
+       v:"low to high cable fly form"},
+      {name:"Straight-arm cable pulldown", sets:2, range:"12–15", tag:"lats", cls:"iso", wu:0, tech:"myo",
+       cue:"Arms almost straight, hips back a little, sweep the bar down to your thighs. Lats only, no biceps.",
+       v:"straight arm cable pulldown form"}
+    ]}
+  ]}
+};
+
+/* Two-day weeks: Day C pairs move to the end of A and B */
+const FOLD = { A:[1,2], B:[3,4] };
+const SHORT_PAIRS = 2;
+
+const SUBS = {
+  "Barbell bench press":{
+    o:"Smith machine bench press — 3 × 5–8", od:"Same lift on a fixed path, so the last set can go to failure.",
+    c:"Push-ups, feet on a chair, loaded backpack — 3 × 8–15", cd:"Too easy? Hands on two books for extra depth and a 2 s pause at the bottom."},
+  "Weighted pull-up":{
+    o:"Wide-grip lat pulldown — 3 × 6–10", od:"Pull to your upper chest with a slight lean back. Pulldown taken too: single-arm cable pulldown, 3 × 8–12 per side.",
+    c:"Pull-ups with a loaded backpack — 3 × 6–10", cd:"No bar: inverted rows under a sturdy table, 3 × 10–15."},
+  "Hack squat":{
+    o:"Leg press — 3 × 8–12", od:"Both taken: Smith machine squat, feet slightly forward, 3 × 8–12.",
+    c:"Bulgarian split squat, loaded backpack — 3 × 10–15 per leg", cd:"Rear foot on a couch. A slow 3 s lowering makes it plenty hard."},
+  "Dumbbell lateral raise":{
+    o:"Cable or machine lateral raise — 3 × 10–20", od:"Any version works. Keep the stop at shoulder height.",
+    c:"Band lateral raise — 3 × 15–25", cd:"No band: two full water bottles, 3 s lowering, to failure."},
+  "Seated leg curl":{
+    o:"Lying leg curl — 3 × 8–12", od:"Both taken: Nordic curl negatives, 3 × 4–8, lowering in 4 s.",
+    c:"Nordic curl negatives — 3 × 4–8", cd:"Feet under a couch, lower in 4 s, push back up with your hands. Easier: towel slider curls on a smooth floor, 3 × 10–15."},
+  "Overhead cable triceps extension":{
+    o:"Seated single-dumbbell overhead extension — 3 × 10–15", od:"Stop 1–2 reps short: the weight is behind your head.",
+    c:"Bodyweight triceps extension on a table edge — 3 × 8–15", cd:"Hands on the edge, body straight, bend only at the elbows. Lower the angle to make it harder."},
+  "Standing calf raise":{
+    o:"Calf raise on the leg press — 3 × 10–15", od:"Or a Smith machine calf raise on a plate. Knees straight, full stretch.",
+    c:"Single-leg calf raise on a step — 3 × 15–25 per leg", cd:"Hold a loaded backpack when 25 gets easy."},
+  "Kneeling cable crunch":{
+    o:"Crunch with a plate on your chest — 3 × 10–15", od:"On the floor or a decline bench. Same rule: stop 1–2 reps short.",
+    c:"Crunch with arms overhead — 3 × 15–25", cd:"Feet up on a couch makes it harder."},
+
+  "Smith incline press":{
+    o:"Incline dumbbell press, 30° — 3 × 6–10", od:"With dumbbells, stop 1–2 reps short. No failure on free weights.",
+    c:"Decline push-ups, feet on a couch — 3 × 8–15", cd:"Higher feet means more upper chest. Backpack when 15 gets easy."},
+  "Seated cable row":{
+    o:"Chest-supported row, machine or T-bar — 3 × 8–12", od:"Chest on the pad keeps your lower back out of it.",
+    c:"Inverted row under a table — 3 × 8–15", cd:"Feet farther forward makes it harder."},
+  "Leg press":{
+    o:"Hack squat — 3 × 8–12", od:"Both taken: Smith machine squat, feet forward, 3 × 8–12.",
+    c:"Bulgarian split squat — 3 × 10–15 per leg", cd:"Loaded backpack, 3 s lowering."},
+  "Seated dumbbell lateral raise":{
+    o:"Machine or cable lateral raise — 3 × 12–20", od:"Stop at shoulder height.",
+    c:"Band lateral raise — 3 × 15–25", cd:"No band: two water bottles, slow."},
+  "Leg press calf raise":{
+    o:"Standing calf raise — 3 × 10–15", od:"Or a Smith machine calf raise on a plate.",
+    c:"Single-leg calf raise on a step — 3 × 15–25 per leg", cd:"Pause 2 s at the bottom of every rep."},
+  "Lying reverse crunch":{
+    o:"Hanging knee raise — 3 × 10–15", od:"Curl the pelvis up, no swinging.",
+    c:"Already bodyweight: keep it", cd:"Harder: straighter legs and a slower lowering."},
+  "Incline dumbbell curl":{
+    o:"Bayesian cable curl — 3 × 8–12", od:"Face away from a low pulley, arm behind your body.",
+    c:"Chin-ups, palms toward you — 3 × 6–12", cd:"No bar: backpack curls, 3 s lowering, 3 × 10–15."},
+
+  "Cable Y-raise":{
+    o:"Machine lateral raise — 4 × 10–20", od:"Or dumbbell lateral raise. Stop at shoulder height.",
+    c:"Band Y-raise — 4 × 15–25", cd:"No band: water bottles, slow lowering, to failure."},
+  "Reverse cable fly":{
+    o:"Reverse pec deck — 3 × 12–20", od:"Or chest-supported dumbbell reverse fly on a 30° bench.",
+    c:"Band pull-apart — 3 × 15–25", cd:"No band: face-down Y-raises on the floor, thumbs up, 3 × 12–20."},
+  "Machine chest press":{
+    o:"Dumbbell bench press — 3 × 8–12", od:"Stop 1–2 reps short with dumbbells.",
+    c:"Push-ups, hands on two books — 3 × to failure", cd:"Deeper range puts more stretch on the chest."},
+  "Neutral-grip lat pulldown":{
+    o:"Neutral-grip pull-up — 3 × 8–12", od:"Or single-arm cable pulldown, 3 × 10–12 per side.",
+    c:"Pull-ups — 3 × 8–15", cd:"No bar: inverted rows under a table."},
+  "Rope pushdown":{
+    o:"Straight-bar pushdown — 4 × 10–15", od:"Or dips on the assisted machine, elbows back.",
+    c:"Diamond push-ups — 4 × 8–20", cd:"Or bench dips between two chairs, if your shoulders like them."},
+  "Bayesian cable curl":{
+    o:"Incline dumbbell curl — 4 × 10–15", od:"Bench at 45°, arms behind you.",
+    c:"Chin-ups, palms toward you — 4 × 6–12", cd:"No bar: backpack curls."},
+  "Low-to-high cable fly":{
+    o:"Pec deck — 2 × 10–15", od:"Or incline dumbbell fly at 30°.",
+    c:"Wide push-ups — 2 × to failure", cd:"Hands on books for depth."},
+  "Straight-arm cable pulldown":{
+    o:"Dumbbell pullover on a bench — 2 × 12–15", od:"Hips low, feel the lats stretch overhead.",
+    c:"Band straight-arm pulldown — 2 × 15–25", cd:"No band: slow inverted rows, 2 × 10–15."}
+};
+
+const PHASES = {
+  1:"Weeks 1–2 · <b>Ramp-in</b>. Every set stops 2–3 reps before failure. Log every weight: this is your baseline.",
+  3:"Weeks 3–4 · <b>Push</b>. Machines and cables: last set to failure. Barbell: stop 1 rep short.",
+  5:"Weeks 5–6 · <b>Intensify</b>. Same as 3–4, plus myo-reps or partials on the last set where the card says so.",
+  7:"Weeks 7–8 · <b>Peak</b>. Same as 5–6. Beat last week on every exercise: one more rep, or a little more weight.",
+  9:"Week 9 · <b>Deload</b>. Half the sets, same weights, stop 3–4 reps short. Then back to week 1 with your new numbers."
+};
+
+const TECH = {
+  myo:"Last set → <b>myo-reps</b>: hit failure, take 5 deep breaths, do 3–5 more. Repeat until you can't get 3.",
+  partial:"Last set → <b>partials</b>: at failure, keep going with half reps in the stretched half until it won't move."
+};
+
+const KEY="lockin:andrew:v1", TKEY="lockin-andrew:theme";
+function defaultState(){ return { week:1, tab:"A", mode:{A:"full",B:"full",C:"full"}, two:{}, log:{}, notes:{}, open:{"A-A1":true}, updatedAt:0 }; }
+let state = defaultState();
+
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function num(x){ if(x==null) return NaN; const s=String(x).trim().replace(",","."); return s===""?NaN:parseFloat(s); }
+function setKey(d,name,w,i){ return d+"|"+name+"|"+w+"|"+i; }
+function idOf(k,f){ return "s_"+k.replace(/[^A-Za-z0-9]/g,"_")+"_"+f; }
+function lsGet(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
+function lsSet(v){ try{ localStorage.setItem(KEY,v); return true; }catch(e){ return false; } }
+function hhmm(){ return new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}); }
+function mark(t,ok){ const el=document.getElementById("status"); el.textContent=t; el.classList.toggle("ok",!!ok); }
+function persist(){
+  state.updatedAt=Date.now();
+  if(lsSet(JSON.stringify(state))) mark("Saved on this device · "+hhmm(), true);
+  else mark("This browser blocked saving. Leave private mode.", false);
+}
+function isTwo(){ return !!state.two[state.week]; }
+function range(e){ const p=e.range.split("–").map(Number); return {lo:p[0], hi:p[1]}; }
+
+/* ---------- time estimate: 40 s per set + paired rest, 35 s per warm-up set, 90 s to change station, 4 min warm-up ---------- */
+function wuSets(e){ return e.wu===2?2:(e.wu?1:0); }
+function pairSecs(pr, folded){ let s=90; pr.ex.forEach(e=>{ s+=e.sets*(40+pr.rest); if(!folded) s+=wuSets(e)*35; }); return s; }
+function sessionMin(day, mode, withFold){
+  let s=240;
+  PLAN[day].pairs.forEach(pr=>{ if(mode==="short" && pr.n>SHORT_PAIRS) return; s+=pairSecs(pr,false); });
+  if(withFold && mode!=="short" && FOLD[day]) FOLD[day].forEach(n=>{ s+=pairSecs(PLAN.C.pairs[n-1],true); });
+  return Math.round(s/300)*5;
+}
+function setCount(pairs){ return pairs.reduce((a,pr)=>a+pr.ex.reduce((b,e)=>b+e.sets,0),0); }
+
+/* ---------- in-workout rules ---------- */
+function effortText(e,w){
+  if(w===9) return "Deload: first half of the sets, same weight, stop 3–4 reps short";
+  if(w<=2) return "Stop 2–3 reps before failure";
+  let t;
+  if(e.cls==="free") t="Stop 1 rep short. Never grind a rep alone";
+  else if(e.cls==="core") t="Stop 1–2 reps short (lower back)";
+  else if(e.cls==="comp") t="Last set: 0–1 reps left. Others: 1–2 left";
+  else t="Last set to failure. Others: 1 rep left";
+  if(w>=7) t+=" · beat last week";
+  return t;
+}
+function wuText(e){ if(!e.wu) return ""; if(typeof e.wu==="string") return e.wu; return e.wu===2 ? "Warm-up: ½ weight × 10, then ¾ × 4" : "Warm-up: 1 light set, ½ weight × 8"; }
+function weekSets(day,name,n,w){
+  const out=[];
+  for(let i=0;i<n;i++){ const v=state.log[setKey(day,name,w,i)]; if(v && ((v.kg!=null&&v.kg!=="")||(v.reps!=null&&v.reps!==""))) out.push({kg:v.kg, reps:v.reps}); }
+  return out;
+}
+function history(day,e,before){
+  const h=[];
+  for(let w=1; w<before; w++){
+    if(w===9) continue;
+    const s=weekSets(day,e.name,e.sets,w).map(o=>({kg:isNaN(num(o.kg))?0:num(o.kg), reps:num(o.reps)})).filter(o=>!isNaN(o.reps));
+    if(s.length) h.push({w,s});
+  }
+  return h;
+}
+function hint(day,e,w){
+  const {lo,hi}=range(e);
+  if(w===9) return {c:"keep", t:"Deload: last week's weights, half the sets, easy."};
+  const h=history(day,e,w);
+  if(!h.length) return {c:"keep", t:"First time: pick a weight that lands in "+e.range+" with 2–3 reps left in the tank."};
+  const last=h[h.length-1];
+  if(last.s.length>=e.sets && last.s.every(o=>o.reps>=hi))
+    return {c:"up", t:"▲ Week "+last.w+": top of the range on every set. Add weight today: 2.5 kg on a bar, the next dumbbell, or one pin."};
+  if(last.s.some(o=>o.reps<lo))
+    return {c:"heavy", t:"Week "+last.w+": under "+lo+" reps. Drop about 5–10% so every set lands in "+e.range+"."};
+  if(h.length>=2){
+    const top=a=>Math.max.apply(null,a.s.map(o=>o.kg)), tot=a=>a.s.reduce((t,o)=>t+o.reps,0);
+    const prev=h[h.length-2];
+    if(top(last)===top(prev) && tot(last)<=tot(prev)){
+      if(h.length>=3){ const p2=h[h.length-3]; if(top(prev)===top(p2) && tot(prev)<=tot(p2)) return {c:"stall", t:"Stalled 3 weeks: switch to the Busy version for the rest of the block."}; }
+      return {c:"stall", t:"Stalled: same weight, lower it in 3 s and pause 1 s in the stretch. The reps come back."};
+    }
+  }
+  return {c:"keep", t:"Same weight as week "+last.w+". Beat it by a rep."};
+}
+function lastLine(day,e,w){
+  for(let x=w-1; x>=1; x--){
+    const s=weekSets(day,e.name,e.sets,x);
+    if(s.length) return (x===9?"Deload":"Week "+x)+": "+s.map(o=>(o.kg===""||o.kg==null?"?":esc(o.kg))+"×"+(o.reps===""||o.reps==null?"?":esc(o.reps))).join("  ");
+  }
+  return "";
+}
+
+/* ---------- rendering ---------- */
+function exHTML(day,e,pr,partner,o){
+  const w=state.week, half=Math.ceil(e.sets/2);
+  let h=`<div class="ex">
+    <div class="ex-top"><span class="ex-name">${e.name}</span><span class="ex-range">${e.sets} × ${e.range}</span><span class="ex-tag">${e.tag}</span>
+      <a class="vid" href="${yt(e.v)}" target="_blank" rel="noopener">video</a></div>
+    <p class="eff">${effortText(e,w)}</p>`;
+  if(e.tech && w>=5 && w<=8) h+=`<p class="tech">${TECH[e.tech]}</p>`;
+  const wu = o.folded ? "" : wuText(e);
+  if(wu) h+=`<p class="wu">${wu}</p>`;
+  h+=`<p class="ex-cue">${e.cue}</p>`;
+  if(!o.cut){ const hn=hint(day,e,w); if(hn) h+=`<p class="hint ${hn.c}">${hn.t}</p>`; }
+  h+=`<div class="sets">`;
+  for(let i=0;i<e.sets;i++){
+    const off = o.cut || (w===9 && i>=half);
+    const k=setKey(day,e.name,w,i), v=state.log[k]||{};
+    const done = (v.kg!=null&&v.kg!=="")||(v.reps!=null&&v.reps!=="");
+    h+=`<span class="set ${done?"done":""} ${off?"off":""}">
+      <input type="text" inputmode="decimal" id="${idOf(k,"kg")+(o.folded?"_f":"")}" placeholder="${e.bw?"+kg":"kg"}" value="${esc(v.kg)}" data-k="${esc(k)}" data-f="kg" aria-label="${esc(e.name)}, set ${i+1}, weight">
+      <span class="x">×</span>
+      <input type="text" inputmode="numeric" id="${idOf(k,"reps")+(o.folded?"_f":"")}" placeholder="reps" value="${esc(v.reps)}" data-k="${esc(k)}" data-f="reps" aria-label="${esc(e.name)}, set ${i+1}, reps">
+    </span>`;
+  }
+  h+=`</div>`;
+  const ll=lastLine(day,e,w); if(ll) h+=`<div class="prev">${ll}</div>`;
+  const sb=SUBS[e.name]||{};
+  h+=`<div class="altrow">
+      <button class="restbtn" type="button" data-rest="${pr.rest}" data-next="${esc(partner||e.name)}">Rest ${pr.rest} s</button>
+      <button class="altbtn" type="button" data-alt="o" aria-expanded="false">Busy</button>
+      <button class="altbtn" type="button" data-alt="c" aria-expanded="false">No gym</button>
+    </div>
+    <div class="subst" data-sub="o" hidden><b>Machine taken → ${sb.o||"no swap listed"}</b>${sb.od?`<span class="fall">${sb.od}</span>`:""}</div>
+    <div class="subst" data-sub="c" hidden><b>No gym → ${sb.c||"no swap listed"}</b>${sb.cd?`<span class="fall">${sb.cd}</span>`:""}</div>
+  </div>`;
+  return h;
+}
+
+function pairHTML(host,logDay,pr,o){
+  const oid=host+"-"+logDay+pr.n, open=!!state.open[oid];
+  const label=(o.folded?"Day C · ":"")+"Pair "+pr.n;
+  let h=`<div class="pair ${open?"open":""} ${o.cut?"cut":""} ${(o.folded||o.blue)?"fold":""}">
+    <button class="pair-head" type="button" data-open="${oid}" aria-expanded="${open}">
+      <span class="n">${label}</span>
+      <span class="lbl">${pr.lbl}${o.chip?` <span class="chip">${o.chip}</span>`:""}</span>
+      <span class="rs">${o.cut?"skip today":"rest "+pr.rest+" s"}</span>
+    </button><div class="pair-body">`;
+  if(pr.same) h+=`<p class="samemachine">${pr.same}</p>`;
+  pr.ex.forEach((e,i)=>{ const p=pr.ex[1-i]; h+=exHTML(logDay,e,pr,p?p.name:null,o); });
+  h+=`</div></div>`;
+  return h;
+}
+
+function renderSession(day){
+  const P=PLAN[day], mode=state.mode[day]||"full", two=isTwo();
+  const fold = two && FOLD[day];
+  const full=sessionMin(day,"full",fold), shortM=sessionMin(day,"short",false);
+  let h=`<div class="block"><h3>${P.title}</h3><p>${P.focus}</p>
+    <p class="sub2">${setCount(P.pairs)} sets · ~${sessionMin(day,"full",false)} min${fold?` · + Day C pairs this week: ~${full} min`:""}</p></div>`;
+  h+=`<div class="modes" data-day="${day}">
+      <button type="button" data-m="full" aria-pressed="${mode==="full"}">Full · ~${full} min</button>
+      <button type="button" data-m="short" aria-pressed="${mode==="short"}">Short · ~${shortM} min</button>
+    </div>`;
+  if(day==="C" && two){
+    h+=`<div class="block foldnote"><h3>No Day C this week</h3>
+      <p>Do these on top of your other sessions for as long as you can: Pairs 1–2 after Session A, Pairs 3–4 after Session B. They're already there, in blue. Whatever doesn't fit, split into short 10–15 min mini-sessions during the week.</p></div>`;
+  }
+  h+=`<div class="block"><h3>Warm-up · same every day · ~5 min</h3>
+    <ol><li>3–5 min easy treadmill walk (add some incline) or bike.</li>
+    <li>First exercise: ½ your working weight × 10, then ¾ × 4.</li>
+    <li>Each new exercise after that: the card tells you if it needs a light set first. Light sets don't count.</li></ol>
+    <p class="note">No floor stretching needed.</p></div>`;
+  P.pairs.forEach(pr=>{
+    const cut = mode==="short" && pr.n>SHORT_PAIRS;
+    let chip="";
+    if(day==="C" && two) chip = FOLD.A.includes(pr.n) ? "→ after A" : "→ after B";
+    h+=pairHTML(day,day,pr,{cut, blue:(day==="C"&&two), chip});
+    if(mode==="short" && pr.n===SHORT_PAIRS){
+      h+=`<div class="block prio"><h3>End of Short mode</h3><p>Pairs 1–2 done: ${P.short}. Everything below is what you skip today.</p></div>`;
+    }
+  });
+  if(fold){
+    const sc = mode==="short";
+    h+=`<div class="block foldnote"><h3>+ From Day C</h3>
+      <p>${sc ? "Short day: skip these today and split them into short mini-sessions this week."
+             : "No 3rd day this week: do these on top of today's session for as long as you can. Didn't fit? Split the rest into short mini-sessions during the week."}</p></div>`;
+    FOLD[day].forEach(n=>{ h+=pairHTML(day,"C",PLAN.C.pairs[n-1],{folded:true, cut:sc}); });
+  }
+  h+=`<div class="block"><h3>Session notes</h3><textarea id="note-${day}" data-note="${day}" placeholder="Pain, form, energy, what stalled…">${esc(state.notes[day])}</textarea></div>`;
+  document.getElementById("tab-"+day).innerHTML=h;
+}
+
+function renderWeeks(){
+  const el=document.getElementById("weeks"); el.innerHTML="";
+  for(let w=1; w<=9; w++){
+    const b=document.createElement("button");
+    b.type="button"; b.textContent = w===9?"DL":String(w);
+    if(w===9) b.className="dl";
+    b.dataset.week=String(w);
+    b.setAttribute("aria-pressed",String(w===state.week));
+    b.setAttribute("aria-label", w===9?"Week 9, deload":"Week "+w);
+    el.appendChild(b);
+  }
+}
+function renderPhase(){ let k=1; [1,3,5,7,9].forEach(x=>{ if(state.week>=x) k=x; }); document.getElementById("phase").innerHTML=PHASES[k]; }
+function renderStrip(){
+  const two=isTwo();
+  document.getElementById("strip").classList.toggle("two",two);
+  document.getElementById("stripEye").textContent = (state.week===9?"Deload week":"Week "+state.week)+" · "+(two?"2 days":"3 days");
+  document.querySelectorAll(".daysel button").forEach(b=>b.setAttribute("aria-pressed", String((b.dataset.days==="2")===two)));
+  document.getElementById("stripText").innerHTML = two
+    ? "Day C is split into A and B this week, in blue: Pairs 1–2 after A, Pairs 3–4 after B. As long as you can, then 10–15 min mini-sessions for the rest."
+    : "Order: <b>A → B → C</b>, a rest day between when you can. Missed one? Do the session you did longest ago.";
+}
+function renderAll(){ ["A","B","C"].forEach(renderSession); }
+function showTab(t){
+  state.tab=t;
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.tab===t)));
+  ["A","B","C","P"].forEach(x=>{ document.getElementById("tab-"+x).hidden = (x!==t); });
+}
+
+/* ---------- events ---------- */
+document.addEventListener("input", ev=>{
+  const t=ev.target;
+  if(t.matches(".set input")){
+    const k=t.dataset.k, f=t.dataset.f;
+    const v=state.log[k]||{}; v[f]=t.value; state.log[k]=v;
+    const done=(v.kg!=null&&v.kg!=="")||(v.reps!=null&&v.reps!=="");
+    if(!done) delete state.log[k];
+    document.querySelectorAll(".set input").forEach(x=>{
+      if(x.dataset.k===k){ if(x!==t && x.dataset.f===f) x.value=t.value; x.closest(".set").classList.toggle("done",done); }
+    });
+    persist();
+  } else if(t.matches("textarea[data-note]")){
+    state.notes[t.dataset.note]=t.value; persist();
+  }
+});
+document.addEventListener("click", ev=>{
+  const b=ev.target.closest("button"); if(!b) return;
+  if(b.dataset.open){
+    const id=b.dataset.open; state.open[id]=!state.open[id];
+    b.closest(".pair").classList.toggle("open", state.open[id]);
+    b.setAttribute("aria-expanded", String(state.open[id])); persist(); return;
+  }
+  if(b.dataset.rest){ startTimer(parseInt(b.dataset.rest,10), b.dataset.next); return; }
+  if(b.dataset.alt){
+    const ex=b.closest(".ex"), panel=ex.querySelector('.subst[data-sub="'+b.dataset.alt+'"]'), opening=panel.hidden;
+    ex.querySelectorAll(".subst").forEach(p=>p.hidden=true);
+    ex.querySelectorAll(".altbtn").forEach(x=>x.setAttribute("aria-expanded","false"));
+    if(opening){ panel.hidden=false; b.setAttribute("aria-expanded","true"); }
+    return;
+  }
+  if(b.dataset.m){ const d=b.closest(".modes").dataset.day; state.mode[d]=b.dataset.m; renderSession(d); persist(); return; }
+  if(b.dataset.days){ state.two[state.week] = (b.dataset.days==="2"); renderStrip(); renderAll(); persist(); return; }
+  if(b.dataset.week){ state.week=parseInt(b.dataset.week,10); renderWeeks(); renderPhase(); renderStrip(); renderAll(); persist(); return; }
+  if(b.dataset.tab){ renderAll(); showTab(b.dataset.tab); window.scrollTo({top:0}); persist(); return; }
+});
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") lsSet(JSON.stringify(state)); });
+window.addEventListener("pagehide",()=>lsSet(JSON.stringify(state)));
+
+/* ---------- rest timer ---------- */
+let tInt=null, tEnd=0, tTotal=0;
+function startTimer(sec,next){
+  clearInterval(tInt); tTotal=sec; tEnd=Date.now()+sec*1000;
+  document.getElementById("tWhat").textContent = next ? "Next: "+next : "";
+  document.getElementById("timer").hidden=false; tick(); tInt=setInterval(tick,250);
+}
+function tick(){
+  const left=Math.max(0,Math.round((tEnd-Date.now())/1000));
+  document.getElementById("tClock").textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0");
+  document.getElementById("drain").style.width=(100*left/tTotal)+"%";
+  if(left<=0){ stopTimer(); try{ if(navigator.vibrate) navigator.vibrate([180,90,180]); }catch(e){} }
+}
+function stopTimer(){ clearInterval(tInt); document.getElementById("timer").hidden=true; }
+document.getElementById("tSkip").addEventListener("click", stopTimer);
+
+/* ---------- summary ---------- */
+function summary(){
+  const L=["ANDREW — LOCK IN · Block 1 · through week "+state.week, ""];
+  ["A","B","C"].forEach(day=>{
+    const rows=[];
+    PLAN[day].pairs.forEach(pr=>pr.ex.forEach(e=>{
+      const lines=[];
+      for(let w=1; w<=9; w++){
+        const s=weekSets(day,e.name,e.sets,w);
+        if(s.length) lines.push("  "+(w===9?"DL":"wk "+w)+": "+s.map(o=>(o.kg===""||o.kg==null?"?":o.kg)+"×"+(o.reps===""||o.reps==null?"?":o.reps)).join("  "));
+      }
+      if(lines.length){ rows.push(e.name+" ("+e.sets+" × "+e.range+")"); rows.push.apply(rows,lines); }
+    }));
+    if(rows.length){ L.push("## "+PLAN[day].title); L.push.apply(L,rows); L.push(""); }
+    if(state.notes[day]) L.push("Notes "+day+": "+state.notes[day], "");
+  });
+  const twos=Object.keys(state.two).filter(k=>state.two[k]);
+  if(twos.length) L.push("2-day weeks: "+twos.join(", "));
+  if(L.length<=2) L.push("Nothing logged yet.");
+  return L.join("\n");
+}
+document.getElementById("export").addEventListener("click", ()=>{
+  const txt=summary();
+  const show=()=>{ const s=document.getElementById("sheet"), ta=document.getElementById("sumtext"); ta.value=txt; s.hidden=false; ta.focus(); ta.select(); mark("Select all and copy the summary.",false); };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(()=>mark("Summary copied. Paste it in the chat.",true), show);
+    } else show();
+  }catch(e){ show(); }
+});
+document.getElementById("sheetClose").addEventListener("click", ()=>{ document.getElementById("sheet").hidden=true; });
+
+/* ---------- theme ---------- */
+function curTheme(){
+  const a=document.documentElement.getAttribute("data-theme");
+  if(a==="dark"||a==="light") return a;
+  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+}
+function paintThemeBtn(){ document.getElementById("theme").textContent = curTheme()==="dark" ? "Light mode" : "Dark mode"; }
+document.getElementById("theme").addEventListener("click", ()=>{
+  const n = curTheme()==="dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme",n);
+  try{ localStorage.setItem(TKEY,n); }catch(e){}
+  paintThemeBtn();
+});
+if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintThemeBtn); }catch(e){} }
+
+/* ---------- boot ---------- */
+(function boot(){
+  const raw=lsGet();
+  if(raw){
+    try{
+      const s=JSON.parse(raw), d=defaultState();
+      state=Object.assign(d,s);
+      state.mode=Object.assign(defaultState().mode, s.mode||{});
+      state.two=s.two||{}; state.log=s.log||{}; state.notes=s.notes||{}; state.open=s.open||{};
+      if(!(state.week>=1 && state.week<=9)) state.week=1;
+      if(["A","B","C","P"].indexOf(state.tab)<0) state.tab="A";
+    }catch(e){ state=defaultState(); }
+  }
+  paintThemeBtn();
+  renderWeeks(); renderPhase(); renderStrip(); renderAll(); showTab(state.tab);
+  mark(raw ? "Your log is loaded." : "Ready. Everything you type saves by itself.", !!raw);
+})();
+</script>
+
+</body>
+</html>
